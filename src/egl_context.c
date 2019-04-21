@@ -249,6 +249,7 @@ static int extensionSupportedEGL(const char* extension)
 
 static GLFWglproc getProcAddressEGL(const char* procname)
 {
+#if !defined(_GLFW_EGL_STATIC)
     _GLFWwindow* window = _glfwPlatformGetTls(&_glfw.contextSlot);
 
     if (window->context.egl.client)
@@ -258,12 +259,14 @@ static GLFWglproc getProcAddressEGL(const char* procname)
         if (proc)
             return proc;
     }
+#endif
 
     return eglGetProcAddress(procname);
 }
 
 static void destroyContextEGL(_GLFWwindow* window)
 {
+#if !defined(_GLFW_EGL_STATIC)
 #if defined(_GLFW_X11)
     // NOTE: Do not unload libGL.so.1 while the X11 display is still open,
     //       as it will make XCloseDisplay segfault
@@ -276,6 +279,7 @@ static void destroyContextEGL(_GLFWwindow* window)
             window->context.egl.client = NULL;
         }
     }
+#endif
 
     if (window->context.egl.surface)
     {
@@ -299,6 +303,7 @@ static void destroyContextEGL(_GLFWwindow* window)
 //
 GLFWbool _glfwInitEGL(void)
 {
+#if !defined(_GLFW_EGL_STATIC)
     int i;
     const char* sonames[] =
     {
@@ -391,6 +396,7 @@ GLFWbool _glfwInitEGL(void)
         _glfwTerminateEGL();
         return GLFW_FALSE;
     }
+#endif
 
     _glfw.egl.display = eglGetDisplay(_GLFW_EGL_NATIVE_DISPLAY);
     if (_glfw.egl.display == EGL_NO_DISPLAY)
@@ -437,11 +443,13 @@ void _glfwTerminateEGL(void)
         _glfw.egl.display = EGL_NO_DISPLAY;
     }
 
+#if !defined(_GLFW_EGL_STATIC)
     if (_glfw.egl.handle)
     {
         _glfw_dlclose(_glfw.egl.handle);
         _glfw.egl.handle = NULL;
     }
+#endif
 }
 
 #define setAttrib(a, v) \
@@ -612,6 +620,7 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
 
     window->context.egl.config = config;
 
+#if !defined(_GLFW_EGL_STATIC)
     // Load the appropriate client library
     if (!_glfw.egl.KHR_get_all_proc_addresses)
     {
@@ -689,6 +698,7 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
             return GLFW_FALSE;
         }
     }
+#endif
 
     window->context.makeCurrent = makeContextCurrentEGL;
     window->context.swapBuffers = swapBuffersEGL;
