@@ -26,7 +26,9 @@
 //========================================================================
 
 #include "internal.h"
+#if !defined(_GLFW_SWITCH)
 #include "mappings.h"
+#endif
 
 #include <string.h>
 #include <stdlib.h>
@@ -248,6 +250,7 @@ GLFWAPI int glfwInit(void)
 
     glfwDefaultWindowHints();
 
+#if !defined(_GLFW_SWITCH)
     {
         int i;
 
@@ -260,6 +263,7 @@ GLFWAPI int glfwInit(void)
             }
         }
     }
+#endif
 
     return GLFW_TRUE;
 }

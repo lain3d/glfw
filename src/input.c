@@ -41,6 +41,8 @@
 #define _GLFW_JOYSTICK_BUTTON   2
 #define _GLFW_JOYSTICK_HATBIT   3
 
+#if !defined(_GLFW_SWITCH)
+
 // Finds a mapping based on joystick GUID
 //
 static _GLFWmapping* findMapping(const char* guid)
@@ -249,6 +251,8 @@ static GLFWbool parseMapping(_GLFWmapping* mapping, const char* string)
     return GLFW_TRUE;
 }
 
+#endif
+
 
 //////////////////////////////////////////////////////////////////////////
 //////                         GLFW event API                       //////
@@ -437,7 +441,9 @@ _GLFWjoystick* _glfwAllocJoystick(const char* name,
     js->hatCount    = hatCount;
 
     strncpy(js->guid, guid, sizeof(js->guid) - 1);
+#if !defined(_GLFW_SWITCH)
     js->mapping = findValidMapping(js);
+#endif
 
     return js;
 }
@@ -1112,6 +1118,7 @@ GLFWAPI GLFWjoystickfun glfwSetJoystickCallback(GLFWjoystickfun cbfun)
 
 GLFWAPI int glfwUpdateGamepadMappings(const char* string)
 {
+#if !defined(_GLFW_SWITCH)
     int jid;
     const char* c = string;
 
@@ -1166,6 +1173,7 @@ GLFWAPI int glfwUpdateGamepadMappings(const char* string)
         if (js->present)
             js->mapping = findValidMapping(js);
     }
+#endif
 
     return GLFW_TRUE;
 }
