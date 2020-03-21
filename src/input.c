@@ -1231,7 +1231,7 @@ GLFWAPI const char* glfwGetGamepadName(int jid)
     return js->mapping->name;
 }
 
-GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state)
+GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstatee* state)
 {
     int i;
     _GLFWjoystick* js;
@@ -1240,7 +1240,7 @@ GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state)
     assert(jid <= GLFW_JOYSTICK_LAST);
     assert(state != NULL);
 
-    memset(state, 0, sizeof(GLFWgamepadstate));
+    memset(state, 0, sizeof(GLFWgamepadstatee));
 
     _GLFW_REQUIRE_INIT_OR_RETURN(GLFW_FALSE);
 

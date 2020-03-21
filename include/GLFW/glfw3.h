@@ -33,7 +33,6 @@
 extern "C" {
 #endif
 
-
 /*************************************************************************
  * Doxygen documentation
  *************************************************************************/
@@ -1625,7 +1624,7 @@ typedef struct GLFWimage
  *
  *  @ingroup input
  */
-typedef struct GLFWgamepadstate
+typedef struct GLFWgamepadstatee
 {
     /*! The states of each [gamepad button](@ref gamepad_buttons), `GLFW_PRESS`
      *  or `GLFW_RELEASE`.
@@ -1635,8 +1634,22 @@ typedef struct GLFWgamepadstate
      *  to 1.0 inclusive.
      */
     float axes[6];
-} GLFWgamepadstate;
+} GLFWgamepadstatee;
 
+typedef struct GLFWjoystickmapping {
+
+    short y;
+    short x;
+    short b;
+    short a;
+    short lb;
+    short lt;
+    short rb;
+    short rt;
+
+} GLFWjoystickmapping;
+
+void glfwConfigureJoystickButtons(GLFWjoystickmapping in_joystick_config);
 
 /*************************************************************************
  * GLFW API functions
@@ -5012,7 +5025,7 @@ GLFWAPI const char* glfwGetGamepadName(int jid);
  *
  *  @ingroup input
  */
-GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state);
+//GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state);
 
 /*! @brief Sets the clipboard to the specified string.
  *

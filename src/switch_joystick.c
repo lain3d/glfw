@@ -25,6 +25,7 @@
 //========================================================================
 
 #include "internal.h"
+#include "string.h"
 
 // Built-in soft-reset combo that triggers a GLFW window close event
 #define SOFT_RESET_COMBO (KEY_PLUS|KEY_MINUS|KEY_L|KEY_R)
@@ -36,6 +37,8 @@
 
 #define TOUCH_WIDTH             1280
 #define TOUCH_HEIGHT            720
+
+GLFWjoystickmapping joystick_config = { -1 };
 
 enum
 {
@@ -116,6 +119,7 @@ void _glfwInitSwitchJoysticks(void)
     js->nx.id = CONTROLLER_P1_AUTO;
 }
 
+extern int get_scancode_by_glfwid(int);
 void _glfwUpdateSwitchJoysticks(void)
 {
     u64 down, held, up;
@@ -145,10 +149,14 @@ void _glfwUpdateSwitchJoysticks(void)
     MAP_KEY(KEY_DOWN, GLFW_KEY_DOWN, KBD_DOWN);
     MAP_KEY(KEY_LEFT, GLFW_KEY_LEFT, KBD_LEFT);
     MAP_KEY(KEY_RIGHT, GLFW_KEY_RIGHT, KBD_RIGHT);
-    MAP_KEY(KEY_A, GLFW_KEY_X, KBD_X);
-    MAP_KEY(KEY_B, GLFW_KEY_Z, KBD_Z);
-    MAP_KEY(KEY_X, GLFW_KEY_S, KBD_S);
-    MAP_KEY(KEY_Y, GLFW_KEY_A, KBD_A);
+    MAP_KEY(KEY_A, joystick_config.a, get_scancode_by_glfwid(joystick_config.a));
+    MAP_KEY(KEY_B, joystick_config.b, get_scancode_by_glfwid(joystick_config.b));
+    MAP_KEY(KEY_X, joystick_config.x, get_scancode_by_glfwid(joystick_config.x));
+    MAP_KEY(KEY_Y, joystick_config.y, get_scancode_by_glfwid(joystick_config.y));
+    MAP_KEY(KEY_L, joystick_config.lb, get_scancode_by_glfwid(joystick_config.lb));
+    MAP_KEY(KEY_R, joystick_config.rb, get_scancode_by_glfwid(joystick_config.rb));
+    MAP_KEY(KEY_ZL, joystick_config.lt, get_scancode_by_glfwid(joystick_config.lt));
+    MAP_KEY(KEY_ZR, joystick_config.rt, get_scancode_by_glfwid(joystick_config.rt));
     MAP_KEY(KEY_PLUS, GLFW_KEY_ENTER, KBD_ENTER);
     MAP_KEY(KEY_MINUS, GLFW_KEY_ESCAPE, KBD_ESC);
 
@@ -217,4 +225,13 @@ void _glfwPlatformUpdateGamepadGUID(char* guid)
 {
 }
 */
+
+void glfwConfigureJoystickButtons(GLFWjoystickmapping in_joystick_config)
+{
+    printf("SETTING JOYSTICK CONFIGURATION... %d %d %d %d %d %d %d %d\n",
+    in_joystick_config.y, in_joystick_config.x, in_joystick_config.b, in_joystick_config.a,
+    in_joystick_config.lb, in_joystick_config.lt, in_joystick_config.rb, in_joystick_config.rt);
+    
+    joystick_config = in_joystick_config;
+}
 
